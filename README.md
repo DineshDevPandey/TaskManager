@@ -1,6 +1,5 @@
-================================================================================
 TaskManager : A simple laravel CURD demonstration
-================================================================================
+===============================
 Setup Environment :
 - Install Composer :
  - curl -sS https://getcomposer.org/installer | php
