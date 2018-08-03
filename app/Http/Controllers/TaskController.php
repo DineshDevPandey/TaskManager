@@ -14,7 +14,8 @@ class TaskController extends Controller
      */
     public function index()
     {
-        //
+      $tasks = Task::all();
+      return view('tasks.index',compact('tasks',$tasks));
     }
 
     /**
@@ -24,7 +25,7 @@ class TaskController extends Controller
      */
     public function create()
     {
-        //
+        return view('tasks.create');
     }
 
     /**
@@ -35,7 +36,14 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      //Validate
+      $request->validate([
+          'title' => 'required|min:3',
+          'description' => 'required',
+      ]);
+
+      $task = Task::create(['title' => $request->title,'description' => $request->description]);
+      return redirect('/tasks/'.$task->id);
     }
 
     /**
@@ -46,7 +54,7 @@ class TaskController extends Controller
      */
     public function show(Task $task)
     {
-        //
+        return view('tasks.show',compact('task',$task));
     }
 
     /**
@@ -57,7 +65,7 @@ class TaskController extends Controller
      */
     public function edit(Task $task)
     {
-        //
+        return view('tasks.edit',compact('task',$task));
     }
 
     /**
@@ -69,7 +77,17 @@ class TaskController extends Controller
      */
     public function update(Request $request, Task $task)
     {
-        //
+      //Validate
+      $request->validate([
+          'title' => 'required|min:3',
+          'description' => 'required',
+      ]);
+
+      $task->title = $request->title;
+      $task->description = $request->description;
+      $task->save();
+      $request->session()->flash('message', 'Successfully modified the task!');
+      return redirect('tasks');
     }
 
     /**
@@ -80,6 +98,8 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        //
+      $task->delete();
+      $request->session()->flash('message', 'Successfully deleted the task!');
+      return redirect('tasks');
     }
 }
